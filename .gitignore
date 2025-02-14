@@ -1,4 +1,1 @@
-*/.terraform/
-*.tfvars
-*.log
-*.tfstate
+.terraform/
