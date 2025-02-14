@@ -6,6 +6,8 @@ resource "aws_s3_bucket" "s3" {
   bucket = "100-buckets"
 }
 
+
+
 resource "aws_s3_bucket_public_access_block" "s3-public-block" {
   bucket = aws_s3_bucket.s3.id
 
