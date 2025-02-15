@@ -48,3 +48,16 @@ resource "aws_s3_bucket_website_configuration" "s3-website" {
   }
 }
 
+resource "aws_s3_bucket_policy" "bucket-policy" {
+  bucket = aws_s3_bucket.s3.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = "arn:aws:iam::050451398632:user/terraform"
+      Action    = "s3:GetObject"
+      Resource  = "arn:aws:s3:::100-buckets/pdf.html/*"
+    }]
+  })
+}
+
