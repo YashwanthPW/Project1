@@ -41,23 +41,27 @@ resource "aws_s3_object" "s3-object" {
 
 
 
-resource "aws_s3_bucket_website_configuration" "s3-website" {
-  bucket = aws_s3_bucket.s3.id
-  index_document {
-    suffix = "pdf.html"
+data "aws_iam_policy_document" "bucket_policy" {
+  statement {
+    sid    = "AllowPublicRead"
+    effect = "Allow"
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+
+    actions = [
+      "s3:GetObject",
+    ]
+
+    resources = [
+      "arn:aws:s3:::100-buckets/pdf.html/*",
+    ]
   }
 }
 
 resource "aws_s3_bucket_policy" "bucket-policy" {
-  bucket = aws_s3_bucket.s3.id
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect    = "Allow"
-      Principal = "arn:aws:iam::050451398632:user/terraform"
-      Action    = "s3:GetObject"
-      Resource  = "arn:aws:s3:::100-buckets/pdf.html/*"
-    }]
-  })
+  bucket =  aws_s3_bucket.s3.id # Replace with your bucket resource
+  policy = data.aws_iam_policy_document.bucket_policy.json
 }
-
